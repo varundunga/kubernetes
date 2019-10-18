@@ -4,3 +4,7 @@ docker build -t varundunga/worker:latest -t varundunga/worker:$SHA -f ./complex/
 docker push varundunga/client
 docker push varundunga/server
 docker push varundunga/worker
+kubectl apply -f ./
+kubectl set image deployments/client-deployment client=varundunga/client:$SHA
+kubectl set image deployments/server-deployment server=varundunga/server:$SHA
+kubectl set image deployments/worker-deployment client=varundunga/worker:$SHA

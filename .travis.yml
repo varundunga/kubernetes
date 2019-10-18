@@ -5,11 +5,16 @@ services:
 env:
   global:
     - SHA=$(git rev-parse HEAD)
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 
 before_install:
   - echo $SHA
   - docker build -t varundunga/react-test -f ./complex/client/Dockerfile.dev ./complex/client
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - curl https://sdk.cloud.google.com | bash > /dev/null;
+  - source $HOME/google-cloud-sdk/path.bash.inc
+  - gcloud components update kubectl
+
 
 script:
   - docker run varundunga/react-test npm test -- --coverage
